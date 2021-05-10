@@ -86,11 +86,17 @@
 
 ## Сгенерируем файлы в /home/:
 		- touch /home/file{1..20}
+
 * Снять снапшот:
+
 		- lvcreate -L 100MB -s -n home_snap /dev/VolGroup00/LogVol_Home
+
 * Удалить часть файлов:
-		- Удалить часть файлов:
+
+		- rm -f /home/file{11..20}
+
 * Процесс восстановления со снапшота:
+
 		- umount /home
 		- lvconvert --merge /dev/VolGroup00/home_snap
 		- mount /home
