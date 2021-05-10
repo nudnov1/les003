@@ -1,4 +1,4 @@
-#    Example to LVM practice:
+##    Example to LVM practice:
 
 * Уменьшить том под / до 8G
 * Выделить том под /home
@@ -10,14 +10,14 @@
 
 
 
-## Подготовим временный том для / раздела:
+### Подготовим временный том для / раздела:
 
 		- pvcreate /dev/sdb
 		- vgcreate vg_root /dev/sdb
     	- lvcreate -n lv_root -l +100%FREE /dev/vg_root
 
 
-## Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
+### Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
 
 		- mkfs.xfs /dev/vg_root/lv_root
 		- mount /dev/vg_root/lv_root /mnt
@@ -35,10 +35,10 @@
 
 		- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 
-### Перезагружаемся 
+#### Перезагружаемся 
 
 
-## Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
+### Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
 
 		- lvremove /dev/VolGroup00/LogVol00
 		- lvcreate -n VolGroup00/LogVol00 -L 8G /dev/VolGroup00
@@ -47,7 +47,7 @@
 		- mount /dev/VolGroup00/LogVol00 /mnt
 
 
-## Так же как в первый раз переконфигурируем grub, за исключением правки /etc/grub2/grub.cfg
+### Так же как в первый раз переконфигурируем grub, за исключением правки /etc/grub2/grub.cfg
 
 		- for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
   		- chroot /mnt/
@@ -55,7 +55,7 @@
 		- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 
 
-## Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
+### Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
 * На свободных дисках создаем зеркало
 
     	- pvcreate /dev/sdc /dev/sdd
@@ -91,7 +91,7 @@
 
 		- echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0" >> /etc/fstab
 
-## Сгенерируем файлы в /home/:
+### Сгенерируем файлы в /home/:
 		- touch /home/file{1..20}
 
 * Снять снапшот:
