@@ -14,15 +14,16 @@
 
 
 
-
 ## Подготовим временный том для / раздела:
 *	pvcreate /dev/sdb
 *	vgcreate vg_root /dev/sdb
 *   lvcreate -n lv_root -l +100%FREE /dev/vg_root
-	
+
+
 ## Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
-	mkfs.xfs /dev/vg_root/lv_root
-	mount /dev/vg_root/lv_root /mnt
+	   - mkfs.xfs /dev/vg_root/lv_root
+	   - mount /dev/vg_root/lv_root /mnt
+	   
 ## Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
     xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
 ## Затем переконфигурируем grub для того, чтобы при старте перейти в новый /
