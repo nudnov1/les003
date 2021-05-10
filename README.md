@@ -60,6 +60,37 @@
     	- lvcreate -L 950M -m1 -n lv_var vg_var
 
 * Создаем на нем ФС и перемещаем туда /var:
+		- mkfs.ext4 /dev/vg_var/lv_var
+		- mkfs.ext4 /dev/vg_var/lv_var
+		- cp -aR /var/* /mnt/ # rsync -avHPSAX /var/ /mnt/
+		- mkdir /tmp/oldvar && mv /var/* /tmp/oldvar
+		- umount /mnt
+		- mount /dev/vg_var/lv_var /var
+		- echo "`blkid | grep var: | awk '{print $2}'` /var ext4 defaults 0 0" >> /etc/fstab
 
+* После чего можно успешно перезагружаться в новый (уменьшенный root) и удалять временную Volume Group:
+		- lvremove /dev/vg_root/lv_root
+		- lvremove /dev/vg_root/lv_root
+		- lvremove /dev/vg_root/lv_root
 
-## Step 5 - 
+* Выделяем том под /home по тому же принципу что делали для /var:
+		- lvcreate -n LogVol_Home -L 2G /dev/VolGroup00
+		- mkfs.xfs /dev/VolGroup00/LogVol_Home
+		- mount /dev/VolGroup00/LogVol_Home /mnt/
+		- cp -aR /home/* /mnt/
+		- rm -rf /home/*
+		- umount /mnt
+		- mount /dev/VolGroup00/LogVol_Home /home/
+* Правим fstab для автоматического монтирования /home
+		- echo "`blkid | grep Home | awk '{print $2}'` /home xfs defaults 0 0" >> /etc/fstab
+
+## Сгенерируем файлы в /home/:
+		- touch /home/file{1..20}
+* Снять снапшот:
+		- lvcreate -L 100MB -s -n home_snap /dev/VolGroup00/LogVol_Home
+* Удалить часть файлов:
+		- Удалить часть файлов:
+* Процесс восстановления со снапшота:
+		- umount /home
+		- lvconvert --merge /dev/VolGroup00/home_snap
+		- mount /home
