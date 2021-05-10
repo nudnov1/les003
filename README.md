@@ -53,13 +53,13 @@
 
 
 ## Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
-* На свободных дисках создаем зеркало:
+	* На свободных дисках создаем зеркало
 
-        - pvcreate /dev/sdc /dev/sdd
-	    - vgcreate vg_var /dev/sdc /dev/sdd
-	    - lvcreate -L 950M -m1 -n lv_var vg_var
+    	- pvcreate /dev/sdc /dev/sdd
+    	- vgcreate vg_var /dev/sdc /dev/sdd
+    	- lvcreate -L 950M -m1 -n lv_var vg_var
 
-* Создаем на нем ФС и перемещаем туда /var:
+	* Создаем на нем ФС и перемещаем туда /var:
 
 
 ## Step 5 - 
