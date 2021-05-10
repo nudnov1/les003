@@ -36,10 +36,26 @@
    s/.img//g"` --force; done
 * Перезагружаемся
 
-## Step 2 - Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
+## Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
+	- lvremove /dev/VolGroup00/LogVol00
+	- lvcreate -n VolGroup00/LogVol00 -L 8G /dev/VolGroup00
+	- mkfs.xfs /dev/VolGroup00/LogVol00
+	- mount /dev/VolGroup00/LogVol00 /mnt
+	- mount /dev/VolGroup00/LogVol00 /mnt
 
-## Step 3 - 
 
-## Step 4 - 
+## Так же как в первый раз переконфигурируем grub, за исключением правки /etc/grub2/grub.cfg
+	- for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
+    - chroot /mnt/
+	- grub2-mkconfig -o /boot/grub2/grub.cfg
+	- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
+
+## Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
+* На свободных дисках создаем зеркало:
+	- pvcreate /dev/sdc /dev/sdd
+	- vgcreate vg_var /dev/sdc /dev/sdd
+	- lvcreate -L 950M -m1 -n lv_var vg_var
+* Создаем на нем ФС и перемещаем туда /var:
+
 
 ## Step 5 - 
