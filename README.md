@@ -16,10 +16,10 @@
 
 
 # Step 1 - 
- * Подготовим временный том для / раздела:
-	pvcreate /dev/sdb
-	vgcreate vg_root /dev/sdb
-	lvcreate -n lv_root -l +100%FREE /dev/vg_root
+ - Подготовим временный том для / раздела:
+*	pvcreate /dev/sdb
+*	vgcreate vg_root /dev/sdb
+*   lvcreate -n lv_root -l +100%FREE /dev/vg_root
 	
 * Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
 	mkfs.xfs /dev/vg_root/lv_root
