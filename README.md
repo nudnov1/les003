@@ -32,6 +32,7 @@
     - grub2-mkconfig -o /boot/grub2/grub.cfg
 
 ## Обновим образ initrd.
+
    cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; 
    s/.img//g"` --force; done
 * Перезагружаемся
@@ -53,9 +54,11 @@
 
 ## Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
 * На свободных дисках создаем зеркало:
+
 	- pvcreate /dev/sdc /dev/sdd
 	- vgcreate vg_var /dev/sdc /dev/sdd
 	- lvcreate -L 950M -m1 -n lv_var vg_var
+	
 * Создаем на нем ФС и перемещаем туда /var:
 
 
