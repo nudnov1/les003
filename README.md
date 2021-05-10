@@ -15,15 +15,29 @@
 
 
 
-# Step 1 - Create new Volume Groupe.
+# Step 1 - 
+ * Подготовим временный том для / раздела:
 	pvcreate /dev/sdb
-	vgcreate otus /dev/sdb
-	lvcreate -l+80%FREE -n test otus
-# Step 2 - Длā начала разметим диск длā будущего исполþзованиā LVM
+	vgcreate vg_root /dev/sdb
+	lvcreate -n lv_root -l +100%FREE /dev/vg_root
+	
+* Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
+	mkfs.xfs /dev/vg_root/lv_root
+	mount /dev/vg_root/lv_root /mnt
+* Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
+    xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+* Затем переконфигурируем grub для того, чтобы при старте перейти в новый /
+    for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
+    chroot /mnt/
+    grub2-mkconfig -o /boot/grub2/grub.cfg
+* Обновим образ initrd.
+   cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; 
+   s/.img//g"` --force; done
+* Перезагружаемся
+# Step 2 - 
 
-# Step 3 - LVM Resizing
-			Расширение LVM
-			Уменьшение LV
-# Step 4 - LVM Snapshot
+# Step 3 - 
 
-# Step 5 - LVM Mirroring
+# Step 4 - 
+
+# Step 5 - 
