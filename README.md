@@ -1,4 +1,4 @@
-Example to LVM practice:
+#    Example to LVM practice:
 
 #  * Уменьшить том под / до 8G
 #  * Выделить том под /home
