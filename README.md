@@ -15,8 +15,7 @@
 
 
 
-# Step 1 - 
- - Подготовим временный том для / раздела:
+## Подготовим временный том для / раздела:
 *	pvcreate /dev/sdb
 *	vgcreate vg_root /dev/sdb
 *   lvcreate -n lv_root -l +100%FREE /dev/vg_root
