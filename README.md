@@ -34,7 +34,7 @@
    cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; 
    s/.img//g"` --force; done
 * Перезагружаемся
-# Step 2 - 
+# Step 2 - Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
 
 # Step 3 - 
 
