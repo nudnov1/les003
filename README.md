@@ -26,17 +26,16 @@
 
 * Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
 
-    - xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+    	- xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
 * Затем переконфигурируем grub для того, чтобы при старте перейти в новый /
 
-    - for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
-    - chroot /mnt/
-    - grub2-mkconfig -o /boot/grub2/grub.cfg
+    	- for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
+    	- chroot /mnt/
+    	- grub2-mkconfig -o /boot/grub2/grub.cfg
 
 * Обновим образ initrd.
 
-   cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; 
-   s/.img//g"` --force; done
+		- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 * Перезагружаемся
 
 ## Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
