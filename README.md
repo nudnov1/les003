@@ -11,14 +11,16 @@
 
 
 ## Подготовим временный том для / раздела:
-	- pvcreate /dev/sdb
-	- vgcreate vg_root /dev/sdb
-    - lvcreate -n lv_root -l +100%FREE /dev/vg_root
+
+		- pvcreate /dev/sdb
+		- vgcreate vg_root /dev/sdb
+    	- lvcreate -n lv_root -l +100%FREE /dev/vg_root
 
 
 ## Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
-	- mkfs.xfs /dev/vg_root/lv_root
-	- mount /dev/vg_root/lv_root /mnt
+
+		- mkfs.xfs /dev/vg_root/lv_root
+		- mount /dev/vg_root/lv_root /mnt
 
 * Создадим на нем файловую систему и смонтируем его, чтобы перенести туда данные:
 
@@ -32,23 +34,24 @@
 * Обновим образ initrd.
 
 		- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
-* Перезагружаемся
+
+## Перезагружаемся
 
 ## Теперь нам нужно изменить размер старой VG и вернуть на него рут. Для этого удаляем старый LV размеров в 40G и создаем новый на 8G:
 
-	- lvremove /dev/VolGroup00/LogVol00
-	- lvcreate -n VolGroup00/LogVol00 -L 8G /dev/VolGroup00
-	- mkfs.xfs /dev/VolGroup00/LogVol00
-	- mount /dev/VolGroup00/LogVol00 /mnt
-	- mount /dev/VolGroup00/LogVol00 /mnt
+		- lvremove /dev/VolGroup00/LogVol00
+		- lvcreate -n VolGroup00/LogVol00 -L 8G /dev/VolGroup00
+		- mkfs.xfs /dev/VolGroup00/LogVol00
+		- mount /dev/VolGroup00/LogVol00 /mnt
+		- mount /dev/VolGroup00/LogVol00 /mnt
 
 
 ## Так же как в первый раз переконфигурируем grub, за исключением правки /etc/grub2/grub.cfg
 
-	- for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
-    - chroot /mnt/
-	- grub2-mkconfig -o /boot/grub2/grub.cfg
-	- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
+		- for i in /proc/ /sys/ /dev/ /run/ /boot/; do mount --bind $i /mnt/$i; done
+  		- chroot /mnt/
+		- grub2-mkconfig -o /boot/grub2/grub.cfg
+		- cd /boot ; for i in `ls initramfs-*img`; do dracut -v $i `echo $i|sed "s/initramfs-//g; s/.img//g"` --force; done
 
 
 ## Пока не перезагружаемся и не выходим из под chroot - мы можем заодно перенести /var
